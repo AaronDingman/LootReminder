@@ -1,0 +1,8 @@
+## Interface: 120007, 120005
+## Title: Loot Reminder
+## Notes: Reminds you to loot after boss kills and Mythic+ completion.
+## Author: Custom
+## Version: 1.0.0
+## SavedVariables: LootReminderDB
+
+LootReminder.lua
