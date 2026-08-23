@@ -15,6 +15,7 @@ local defaults = {
 
 local state = {
     pending = nil,
+    delayTimer = nil,
     timer = nil,
     lastLootOpened = 0,
     inMythicPlus = false,
@@ -31,10 +32,17 @@ end
 
 local function StopReminder()
     state.pending = nil
+
+    if state.delayTimer then
+        state.delayTimer:Cancel()
+        state.delayTimer = nil
+    end
+
     if state.timer then
         state.timer:Cancel()
         state.timer = nil
     end
+
     if LootReminderReminderFrame then
         LootReminderReminderFrame:Hide()
     end
@@ -70,15 +78,23 @@ local function StartReminder(kind, name)
         started = GetTime(),
     }
 
-    C_Timer.After(LootReminderDB.delay, function()
-        if not state.pending then return end
-        ShowReminder(kind, name)
+    state.delayTimer = C_Timer.NewTimer(LootReminderDB.delay, function()
+    state.delayTimer = nil
 
-        state.timer = C_Timer.NewTicker(LootReminderDB.repeatInterval, function()
-            if state.pending then
-                ShowReminder(kind, name)
-            end
-        end)
+    if not state.pending then
+        return
+    end
+
+    ShowReminder(kind, name)
+
+    state.timer = C_Timer.NewTicker(
+        LootReminderDB.repeatInterval,
+        function()
+        if state.pending then
+            ShowReminder(kind, name)
+        end
+    end
+    )
     end)
 end
 
