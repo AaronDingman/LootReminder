@@ -1,4 +1,4 @@
-## Interface: 120007, 120005
+## Interface: 120100
 ## Title: Loot Reminder
 ## Notes: Reminds you to loot after boss kills and Mythic+ completion.
 ## Author: Custom
