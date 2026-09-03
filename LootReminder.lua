@@ -123,6 +123,11 @@ local function IsMythicPlus()
     return instanceType == "party" and difficultyID == 8
 end
 
+local function IsRaidOrDungeon()
+    local _, instanceType = GetInstanceInfo()
+    return instanceType == "party" or instanceType == "raid"
+end
+
 local function HandleEncounterEnd(encounterID, encounterName, difficultyID, groupSize, success)
     if success ~= 1 then return end
     if not LootReminderDB.bossEnabled then return end
@@ -161,6 +166,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
         state.inMythicPlus = IsMythicPlus()
         state.mplusCompletionHandled = false
+        if not IsRaidOrDungeon() then
+            StopReminder()
+        end
         return
     end
 
