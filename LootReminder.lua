@@ -112,8 +112,32 @@ local function CreateReminderFrame()
     bg:SetColorTexture(0, 0, 0, 0.65)
 
     f.text = f:CreateFontString(nil, "OVERLAY", "GameFontNormalHuge")
-    f.text:SetPoint("CENTER")
+    f.text:SetPoint("TOP", 0, -8)
     f.text:SetJustifyH("CENTER")
+
+    f.stopButton = CreateFrame("Button", nil, f, "BackdropTemplate")
+    f.stopButton:SetSize(140, 24)
+    f.stopButton:SetPoint("BOTTOM", 0, 8)
+    f.stopButton:SetBackdrop({
+        edgeFile = "Interface\\Buttons\\WHITE8X8",
+        edgeSize = 1,
+    })
+    f.stopButton:SetBackdropColor(0, 0, 0, 0)
+    f.stopButton:SetBackdropBorderColor(1, 0.8, 0, 1)
+
+    local stopButtonText = f.stopButton:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    stopButtonText:SetPoint("CENTER")
+    stopButtonText:SetText("Stop Reminders")
+    stopButtonText:SetTextColor(1, 0.8, 0)
+    f.stopButton:SetScript("OnClick", StopReminder)
+    f.stopButton:SetScript("OnEnter", function()
+        f.stopButton:SetBackdropBorderColor(1, 1, 0.4, 1)
+        stopButtonText:SetTextColor(1, 1, 0.4)
+    end)
+    f.stopButton:SetScript("OnLeave", function()
+        f.stopButton:SetBackdropBorderColor(1, 0.8, 0, 1)
+        stopButtonText:SetTextColor(1, 0.8, 0)
+    end)
 
     return f
 end
