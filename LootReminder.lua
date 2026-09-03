@@ -1,5 +1,6 @@
 local ADDON_NAME = ...
 local frame = CreateFrame("Frame")
+LootReminder = LootReminder or {}
 
 LootReminderDB = LootReminderDB or {}
 
@@ -11,6 +12,8 @@ local defaults = {
     soundEnabled = true,
     chatEnabled = true,
     screenEnabled = true,
+    positionX = 0,
+    positionY = 220,
 }
 
 local state = {
@@ -98,12 +101,16 @@ local function StartReminder(kind, name)
     end)
 end
 
+function LootReminder.TestReminder()
+    StartReminder("boss", "THE BOSS")
+end
+
 local reminderFrame
 
 local function CreateReminderFrame()
     local f = CreateFrame("Frame", "LootReminderReminderFrame", UIParent)
     f:SetSize(500, 70)
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, 220)
+    f:SetPoint("CENTER", UIParent, "CENTER", LootReminderDB.positionX, LootReminderDB.positionY)
     f:SetFrameStrata("HIGH")
     f:Hide()
 
@@ -253,6 +260,10 @@ SlashCmdList.LOOTREMINDER = function(msg)
         StartReminder("boss", "THE BOSS")
     elseif msg == "stop" then
         StopReminder()
+    elseif msg == "settings" or msg == "config" then
+        if LootReminderSettings and LootReminderSettings.Toggle then
+            LootReminderSettings.Toggle()
+        end
     elseif msg == "reset" then
         LootReminderDB = {}
         InitDB()
@@ -266,6 +277,7 @@ SlashCmdList.LOOTREMINDER = function(msg)
         print("  /lr screen     - toggle screen reminder")
         print("  /lr test       - test reminder")
         print("  /lr stop       - stop current reminder")
+        print("  /lr settings   - open settings")
         print("  /lr reset      - reset settings")
     end
 end
